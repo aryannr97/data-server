@@ -3,8 +3,7 @@ FROM golang:alpine
 WORKDIR /go/src/data-server
 COPY . .
 
-RUN go get -d -v ./...
-RUN go install -v cmd/main.go
+RUN CGO_ENABLED=0 GOOS=${GOOS} go build -mod vendor cmd/main.go
 
 EXPOSE 9090
-CMD ["main"]
+CMD ["./main"]

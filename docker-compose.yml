@@ -4,10 +4,12 @@ services:
     image: mongo
     container_name: database
     environment:
-        - MONGO_ROOT_USERNAME=root
-        - MONGO_ROOT_PASSWORD=rootpass
+        - MONGO_INITDB_DATABASE=iam-db
+        - DATABASE_NAME=iam-db
     ports:
       - "27017:27017"
+    volumes:
+      - ./mongo-init.js:/docker-entrypoint-initdb.d/mongo-init.js:ro
   app:
     container_name: grpc
     build: .
@@ -15,3 +17,6 @@ services:
       - "9090:9090"
     depends_on: [db]
     tty: true
+    environment:
+        - DATABASE_URL=mongodb://db:27017
+        - DATABASE_NAME=iam-db
