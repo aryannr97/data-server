@@ -1,0 +1,21 @@
+syntax = "proto3";
+
+option go_package = "/user";
+
+package user;
+
+message UserAddRequest {
+    string firstname = 1;
+    string lastname = 2;
+    string email = 3;
+    string phone = 4;
+    string country = 5;
+}
+
+message UserAddResponse {
+    string id = 1;
+}
+
+service UserService {
+    rpc AddUser (UserAddRequest) returns (UserAddResponse);
+}
