@@ -1,0 +1,17 @@
+version: "3"
+services:
+  db:
+    image: mongo
+    container_name: database
+    environment:
+        - MONGO_ROOT_USERNAME=root
+        - MONGO_ROOT_PASSWORD=rootpass
+    ports:
+      - "27017:27017"
+  app:
+    container_name: grpc
+    build: .
+    ports:
+      - "9090:9090"
+    depends_on: [db]
+    tty: true
