@@ -16,6 +16,20 @@ message UserAddResponse {
     string id = 1;
 }
 
+message UserGetReuqest {
+    string id = 1;
+}
+
+message UserGetResponse {
+    string id = 1;
+    string firstname = 2;
+    string lastname = 3;
+    string email = 4;
+    string phone = 5;
+    string country = 6;
+}
+
 service UserService {
     rpc AddUser (UserAddRequest) returns (UserAddResponse);
+    rpc GetUser (UserGetReuqest) returns (UserGetResponse);
 }

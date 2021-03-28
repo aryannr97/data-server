@@ -31,4 +31,23 @@ func (s *Server) AddUser(ctx context.Context, request *UserAddRequest) (*UserAdd
 	return &UserAddResponse{Id: id}, nil
 }
 
+// GetUser retrives user details for given id
+func (s *Server) GetUser(ctx context.Context, request *UserGetReuqest) (*UserGetResponse, error) {
+	res, err := s.UserStore.GetUser(request.Id)
+	if err != nil {
+		return nil, err
+	}
+
+	resp := &UserGetResponse{
+		Id:        request.Id,
+		Firstname: res.FirstName,
+		Lastname:  res.LastName,
+		Email:     res.Email,
+		Phone:     res.Phone,
+		Country:   res.Country,
+	}
+
+	return resp, nil
+}
+
 func (s *Server) mustEmbedUnimplementedUserServiceServer() {}
