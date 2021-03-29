@@ -4,4 +4,5 @@ package repository
 type IUserRepository interface {
 	AddUser(UserEntity) (string, error)
 	GetUser(string) (UserDocument, error)
+	UpdateUser(string, UserEntity) error
 }

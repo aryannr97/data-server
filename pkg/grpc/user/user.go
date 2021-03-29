@@ -50,4 +50,19 @@ func (s *Server) GetUser(ctx context.Context, request *UserGetReuqest) (*UserGet
 	return resp, nil
 }
 
+// UpdateUser updates user details for given id
+func (s *Server) UpdateUser(ctx context.Context, request *UserUpdateRequest) (*Empty, error) {
+	log.Println("Updating user data")
+
+	userDoc := repository.UserEntity{
+		FirstName: request.Firstname,
+		LastName:  request.Lastname,
+		Email:     request.Email,
+		Phone:     request.Phone,
+		Country:   request.Country,
+	}
+
+	return &Empty{}, s.UserStore.UpdateUser(request.Id, userDoc)
+}
+
 func (s *Server) mustEmbedUnimplementedUserServiceServer() {}

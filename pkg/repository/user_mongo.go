@@ -38,3 +38,21 @@ func (usr *MongoUserRepository) GetUser(id string) (UserDocument, error) {
 
 	return userDoc, err
 }
+
+// UpdateUser updates user data in the database
+func (usr *MongoUserRepository) UpdateUser(id string, user UserEntity) error {
+	var userDoc UserDocument
+
+	objID, err := primitive.ObjectIDFromHex(id)
+	if err != nil {
+		return err
+	}
+
+	update := bson.M{
+		"$set": user,
+	}
+
+	err = usr.DB.Collection("users").FindOneAndUpdate(context.Background(), bson.M{"_id": objID}, update).Decode(&userDoc)
+
+	return err
+}
