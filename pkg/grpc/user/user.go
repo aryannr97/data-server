@@ -36,7 +36,7 @@ func (s *Server) GetUser(ctx context.Context, request *UserGetReuqest) (*UserGet
 	log.Println("Retrieving user data")
 	res, err := s.UserStore.GetUser(ctx, request.Id)
 	if err != nil {
-		return nil, err
+		return &UserGetResponse{}, err
 	}
 
 	resp := &UserGetResponse{
