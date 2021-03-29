@@ -23,7 +23,7 @@ func (s *Server) AddUser(ctx context.Context, request *UserAddRequest) (*UserAdd
 		Phone:     request.Phone,
 		Country:   request.Country,
 	}
-	id, err := s.UserStore.AddUser(userDoc)
+	id, err := s.UserStore.AddUser(ctx, userDoc)
 	if err != nil {
 		return &UserAddResponse{}, err
 	}
@@ -33,7 +33,8 @@ func (s *Server) AddUser(ctx context.Context, request *UserAddRequest) (*UserAdd
 
 // GetUser retrives user details for given id
 func (s *Server) GetUser(ctx context.Context, request *UserGetReuqest) (*UserGetResponse, error) {
-	res, err := s.UserStore.GetUser(request.Id)
+	log.Println("Retrieving user data")
+	res, err := s.UserStore.GetUser(ctx, request.Id)
 	if err != nil {
 		return nil, err
 	}
@@ -62,7 +63,13 @@ func (s *Server) UpdateUser(ctx context.Context, request *UserUpdateRequest) (*E
 		Country:   request.Country,
 	}
 
-	return &Empty{}, s.UserStore.UpdateUser(request.Id, userDoc)
+	return &Empty{}, s.UserStore.UpdateUser(ctx, request.Id, userDoc)
+}
+
+// DeleteUser deletes user for given id
+func (s *Server) DeleteUser(ctx context.Context, request *UserDeleteRequest) (*Empty, error) {
+	log.Println("Deleting user")
+	return &Empty{}, s.UserStore.DeleteUser(ctx, request.Id)
 }
 
 func (s *Server) mustEmbedUnimplementedUserServiceServer() {}

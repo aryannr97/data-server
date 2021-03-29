@@ -14,7 +14,7 @@ type MongoUserRepository struct {
 }
 
 // AddUser adds new user to the database
-func (usr *MongoUserRepository) AddUser(user UserEntity) (string, error) {
+func (usr *MongoUserRepository) AddUser(ctx context.Context, user UserEntity) (string, error) {
 	result, err := usr.DB.Collection("users").InsertOne(context.Background(), user)
 	if err != nil {
 		return "", err
@@ -25,7 +25,7 @@ func (usr *MongoUserRepository) AddUser(user UserEntity) (string, error) {
 }
 
 // GetUser fetches user info from the database
-func (usr *MongoUserRepository) GetUser(id string) (UserDocument, error) {
+func (usr *MongoUserRepository) GetUser(ctx context.Context, id string) (UserDocument, error) {
 	var userDoc UserDocument
 
 	objID, err := primitive.ObjectIDFromHex(id)
@@ -40,7 +40,7 @@ func (usr *MongoUserRepository) GetUser(id string) (UserDocument, error) {
 }
 
 // UpdateUser updates user data in the database
-func (usr *MongoUserRepository) UpdateUser(id string, user UserEntity) error {
+func (usr *MongoUserRepository) UpdateUser(ctx context.Context, id string, user UserEntity) error {
 	var userDoc UserDocument
 
 	objID, err := primitive.ObjectIDFromHex(id)
@@ -54,5 +54,17 @@ func (usr *MongoUserRepository) UpdateUser(id string, user UserEntity) error {
 
 	err = usr.DB.Collection("users").FindOneAndUpdate(context.Background(), bson.M{"_id": objID}, update).Decode(&userDoc)
 
+	return err
+}
+
+// DeleteUser deletes user document for given id
+func (usr *MongoUserRepository) DeleteUser(ctx context.Context, id string) error {
+	objID, err := primitive.ObjectIDFromHex(id)
+
+	if err != nil {
+		return err
+	}
+
+	_, err = usr.DB.Collection("users").DeleteOne(ctx, bson.M{"_id": objID})
 	return err
 }

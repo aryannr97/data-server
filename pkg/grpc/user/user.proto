@@ -40,8 +40,13 @@ message UserUpdateRequest {
 
 message Empty{}
 
+message UserDeleteRequest {
+    string id = 1;
+}
+
 service UserService {
     rpc AddUser (UserAddRequest) returns (UserAddResponse);
     rpc GetUser (UserGetReuqest) returns (UserGetResponse);
     rpc UpdateUser (UserUpdateRequest) returns (Empty);
+    rpc DeleteUser (UserDeleteRequest) returns (Empty);
 }
