@@ -1,6 +1,6 @@
 version: "3"
 services:
-  db:
+  mongo-service:
     image: mongo
     container_name: database
     environment:
@@ -10,13 +10,13 @@ services:
       - "27017:27017"
     volumes:
       - ./mongo-init.js:/docker-entrypoint-initdb.d/mongo-init.js:ro
-  app:
+  data-service:
     container_name: grpc
     build: .
     ports:
       - "9090:9090"
-    depends_on: [db]
+    depends_on: [mongo-service]
     tty: true
     environment:
-        - DATABASE_URL=mongodb://db:27017
+        - DATABASE_URL=mongodb://mongo-service:27017
         - DATABASE_NAME=iam-db
